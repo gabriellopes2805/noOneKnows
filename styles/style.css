@@ -1,0 +1,348 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "victor";
+  font-weight: normal;
+  font-style: italic;
+  src: url("../fonts/TTF/VictorMono-LightItalic.ttf") format("truetype");
+}
+/* ============================= */
+/* RESET */
+/* ============================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: #0f0f0f;
+}
+
+body {
+  color: #f7f7f7;
+  font-family: "victor", monospace;
+  /* fallback */
+  min-height: 100vh;
+  /* celulares modernos */
+  min-height: 100dvh;
+}
+body #background {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 100%, #1b1b1b 50%, #171717 65%, #0f0f0f 100%);
+}
+body #container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+body #container #gift {
+  display: flex;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.25s ease, filter 0.25s ease;
+}
+body #container #gift #giftImage {
+  z-index: 10;
+  /*
+      Desktop continua com ~10rem.
+      Em celulares diminui automaticamente.
+  */
+  width: clamp(6.25rem, 18vmin, 10rem);
+  height: auto;
+  aspect-ratio: 1/1;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  filter: drop-shadow(2px 2px 1px #000);
+}
+body #container {
+  /*
+      Hover somente em dispositivos
+      que realmente possuem mouse.
+  */
+}
+@media (hover: hover) and (pointer: fine) {
+  body #container #gift:hover {
+    transform: scale(1.1);
+  }
+}
+body #container #gift:active {
+  transform: scale(0.96);
+}
+
+/* ============================= */
+/* BALÕES */
+/* ============================= */
+#balloonLayer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint;
+}
+
+.floatingBalloon {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  filter: blur(var(--balloon-blur, 0px)) drop-shadow(2px 5px 4px #000);
+  will-change: transform, opacity, filter;
+}
+
+/* ============================= */
+/* CARTA */
+/* ============================= */
+.letterScene {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.letter {
+  width: min(38rem, 100vw - 1.5rem);
+  max-height: calc(100dvh - 1.5rem);
+  min-height: 0;
+  padding: clamp(1rem, 4vw, 2.5rem) clamp(1rem, 5vw, 3rem);
+  border-radius: 1.5rem;
+  background: rgba(255, 245, 248, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 190, 210, 0.15);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  color: #f8dce5;
+  font-size: clamp(0.78rem, 2.6vw, 1.15rem);
+  line-height: 1.8;
+  text-align: left;
+  /*
+      ESSENCIAL
+  */
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: auto;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 169, 189, 0.35) transparent;
+}
+
+.letter::-webkit-scrollbar {
+  width: 5px;
+}
+
+.letter::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.letter::-webkit-scrollbar-thumb {
+  background: rgba(244, 169, 189, 0.35);
+  border-radius: 999px;
+}
+
+.letterParagraph {
+  margin: 0 0 clamp(0.7rem, 2vw, 1.25rem) 0;
+}
+
+.letterParagraph:last-child {
+  margin-bottom: 0;
+}
+
+.typingCursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 4px;
+  vertical-align: -0.15em;
+  background: #f4a9bd;
+  animation: cursorBlink 0.8s steps(1) infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+/* ============================= */
+/* CENA FINAL */
+/* ============================= */
+.finalScene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: radial-gradient(circle at center, rgba(255, 185, 220, 0.06) 0%, rgba(15, 15, 15, 0.25) 35%, rgba(5, 5, 5, 0.88) 100%);
+}
+
+.finalSceneContent {
+  position: relative;
+  width: min(92vw, 900px);
+  height: min(72dvh, 500px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.finalGlow {
+  position: absolute;
+  width: clamp(180px, 45vmin, 360px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 165, 220, 0.22) 0%, rgba(255, 165, 220, 0.1) 35%, rgba(255, 165, 220, 0) 70%);
+  filter: blur(clamp(15px, 3vw, 25px));
+  opacity: 0;
+}
+
+.finalHeart {
+  position: absolute;
+  width: clamp(120px, 30vmin, 260px);
+  max-height: 70dvh;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 18px rgba(255, 160, 220, 0.35));
+}
+
+.finalAniversario {
+  position: absolute;
+  width: min(82vw, 620px);
+  max-height: 72dvh;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.12)) drop-shadow(0 0 20px rgba(255, 170, 220, 0.08));
+  clip-path: inset(0 100% 0 0);
+}
+
+.finalHeartPulse {
+  animation: finalHeartPulse 2.1s ease-in-out infinite;
+}
+
+@keyframes finalHeartPulse {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 18px rgba(255, 160, 220, 0.3));
+  }
+  25% {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 28px rgba(255, 160, 220, 0.42));
+  }
+  50% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 22px rgba(255, 160, 220, 0.34));
+  }
+  75% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 26px rgba(255, 160, 220, 0.4));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 18px rgba(255, 160, 220, 0.3));
+  }
+}
+/* ============================= */
+/* CELULARES PEQUENOS */
+/* ============================= */
+@media (max-width: 480px) {
+  .letter {
+    width: 100%;
+    max-height: calc(100dvh - 1.25rem);
+    font-size: clamp(0.72rem, 3.4vw, 0.9rem);
+    line-height: 1.55;
+  }
+  .finalSceneContent {
+    width: 96vw;
+    height: 72dvh;
+  }
+  .finalAniversario {
+    width: 90vw;
+  }
+}
+/* ============================= */
+/* CELULAR DEITADO */
+/* ============================= */
+@media (orientation: landscape) and (max-height: 600px) {
+  body #container #gift #giftImage {
+    width: clamp(5rem, 22vh, 8rem);
+  }
+  .letterScene {
+    padding: 0.5rem;
+  }
+  .letter {
+    width: min(44rem, 94vw);
+    max-height: calc(100dvh - 1rem);
+    padding: 0.8rem 1.25rem;
+    font-size: clamp(0.7rem, 2.2vh, 0.9rem);
+    line-height: 1.45;
+  }
+  .letterParagraph {
+    margin-bottom: 0.6rem;
+  }
+  .finalSceneContent {
+    width: 90vw;
+    height: 88dvh;
+  }
+  .finalHeart {
+    width: clamp(100px, 38vh, 230px);
+  }
+  .finalAniversario {
+    width: min(65vw, 580px);
+    max-height: 85dvh;
+  }
+}/*# sourceMappingURL=style.css.map */
